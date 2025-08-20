@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐛 Binary Clock Debug Challenge - 5 Bugs!</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .bug-notice {
+            background: rgba(255, 107, 107, 0.3);
+            border: 2px solid #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .digital-time {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #4ecdc4;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .binary-clock {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .column-label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+
+        .bit-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bit {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #4ecdc4;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .bit.on {
+            background: #4ecdc4;
+            color: #1e3c72;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.8);
+            transform: scale(1.1);
+        }
+
+        .bit.off {
+            background: rgba(255,255,255,0.1);
+            color: #666;
+        }
+
+        .decimal-value {
+            margin-top: 15px;
+            font-size: 2em;
+            color: #ff6b6b;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .debug-section {
+            max-width: 900px;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #4ecdc4;
+        }
+
+        .legend-on { background: #4ecdc4; }
+        .legend-off { background: rgba(255,255,255,0.1); }
+
+        .bit-values {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-left: 10px;
+            font-size: 0.9em;
+            color: #ccc;
+        }
+
+        .bit-value {
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .code-section {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .bug-line {
+            background: rgba(255, 107, 107, 0.3);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .fix-instruction {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .testing-guide {
+            background: rgba(78, 205, 196, 0.2);
+            border: 2px solid #4ecdc4;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .bug-list {
+            background: rgba(255, 107, 107, 0.2);
+            border: 2px solid #ff6b6b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">🐛 Binary Clock Debug Challenge</h1>
+    
+    <div class="bug-notice">
+        <strong>⚠️ SOMETHING'S WRONG!</strong><br>
+        This binary clock isn't working correctly. Can you figure out what's broken?
+    </div>
+
+    <div class="digital-time" id="digitalTime">00:00:00</div>
+    
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-circle legend-on"></div>
+            <span>1 (ON)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-circle legend-off"></div>
+            <span>0 (OFF)</span>
+        </div>
+    </div>
+
+    <div class="binary-clock">
+        <!-- Hours Tens -->
+        <div class="column">
+            <div class="column-label">H1</div>
+            <div class="bit-container">
+                <div class="bit" id="h1-8">0</div>
+                <div class="bit" id="h1-4">0</div>
+                <div class="bit" id="h1-2">0</div>
+                <div class="bit" id="h1-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="h1-decimal">0</div>
+        </div>
+
+        <!-- Hours Units -->
+        <div class="column">
+            <div class="column-label">H2</div>
+            <div class="bit-container">
+                <div class="bit" id="h2-8">0</div>
+                <div class="bit" id="h2-4">0</div>
+                <div class="bit" id="h2-2">0</div>
+                <div class="bit" id="h2-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="h2-decimal">0</div>
+        </div>
+
+        <!-- Minutes Tens -->
+        <div class="column">
+            <div class="column-label">M1</div>
+            <div class="bit-container">
+                <div class="bit" id="m1-8">0</div>
+                <div class="bit" id="m1-4">0</div>
+                <div class="bit" id="m1-2">0</div>
+                <div class="bit" id="m1-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="m1-decimal">0</div>
+        </div>
+
+        <!-- Minutes Units -->
+        <div class="column">
+            <div class="column-label">M2</div>
+            <div class="bit-container">
+                <div class="bit" id="m2-8">0</div>
+                <div class="bit" id="m2-4">0</div>
+                <div class="bit" id="m2-2">0</div>
+                <div class="bit" id="m2-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="m2-decimal">0</div>
+        </div>
+
+        <!-- Seconds Tens -->
+        <div class="column">
+            <div class="column-label">S1</div>
+            <div class="bit-container">
+                <div class="bit" id="s1-8">0</div>
+                <div class="bit" id="s1-4">0</div>
+                <div class="bit" id="s1-2">0</div>
+                <div class="bit" id="s1-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="s1-decimal">0</div>
+        </div>
+
+        <!-- Seconds Units -->
+        <div class="column">
+            <div class="column-label">S2</div>
+            <div class="bit-container">
+                <div class="bit" id="s2-8">0</div>
+                <div class="bit" id="s2-4">0</div>
+                <div class="bit" id="s2-2">0</div>
+                <div class="bit" id="s2-1">0</div>
+            </div>
+            <div class="bit-values">
+                <div class="bit-value">8</div>
+                <div class="bit-value">4</div>
+                <div class="bit-value">2</div>
+                <div class="bit-value">1</div>
+            </div>
+            <div class="decimal-value" id="s2-decimal">0</div>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h3>🕵️ Debug Challenge: Inspect the Application!</h3>
+        
+        <div class="testing-guide">
+            <h4>🔍 Step 1: Observe the Clock</h4>
+            <p><strong>Your Mission:</strong> Watch the binary clock and figure out what's wrong</p>
+            <p><strong>Key Questions:</strong></p>
+            <ul>
+                <li>Do the red numbers under each column match the cyan time at the top?</li>
+                <li>Do the binary patterns (lit circles) make sense for each digit?</li>
+                <li>Can you convert the binary patterns back to decimal in your head?</li>
+                <li>Are there any obvious patterns or problems you notice?</li>
+            </ul>
+        </div>
+
+        <div class="testing-guide">
+            <h4>📝 Step 2: Document Your Findings</h4>
+            <p>For each column that looks wrong, write down:</p>
+            <ul>
+                <li><strong>What you expected to see</strong> (based on the cyan time)</li>
+                <li><strong>What you actually see</strong> (red number and binary pattern)</li>
+                <li><strong>Your theory</strong> about what might be causing the problem</li>
+            </ul>
+            <p><strong>Example:</strong> "Column H2 should show 4, but shows 8. The binary pattern is 1000 instead of 0100. Theory: The value is being doubled somehow."</p>
+        </div>
+
+        <div class="testing-guide">
+            <h4>💡 Step 3: Use Your Number Systems Knowledge</h4>
+            <p>Think about what you've learned:</p>
+            <ul>
+                <li>What should each decimal digit look like in 4-bit binary?</li>
+                <li>What would happen if binary digits were reversed?</li>
+                <li>What if the wrong time digit was used for a column?</li>
+                <li>What if mathematical operations were applied incorrectly?</li>
+            </ul>
+        </div>
+
+        <div class="testing-guide">
+            <h4>🔧 Step 4: Inspect the Code (Only After You've Observed!)</h4>
+            <p>Once you've identified the problems by watching the application:</p>
+            <ul>
+                <li>Look at the JavaScript code below</li>
+                <li>Try to find the lines that might cause each problem you observed</li>
+                <li>Test your theories by making small changes</li>
+                <li>Verify your fixes by watching the clock behavior</li>
+            </ul>
+        </div>
+
+        <div class="code-section">
+            <h4>🔧 The Code (Inspect After Observing!):</h4>
+            <pre>
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    
+    document.getElementById('digitalTime').textContent = 
+        `${hours}:${minutes}:${seconds}`;
+    
+    updateBinaryColumn('h1', parseInt(hours[0]));
+    updateBinaryColumn('h2', parseInt(hours[1]) << 1);
+    updateBinaryColumn('m1', parseInt(minutes[0]));
+    updateBinaryColumn('m2', parseInt(minutes[1]) + 1);
+    updateBinaryColumn('s1', parseInt(seconds[1]));
+    updateBinaryColumn('s2', parseInt(seconds[0]) * 2);
+}
+
+function updateBinaryColumn(columnId, digit) {
+    let binary = digit.toString(2).padStart(4, '0');
+    
+    // Special case for M1 column
+    if (columnId === 'm1') {
+        binary = binary.split('').reverse().join('');
+    }
+    
+    const bits = [8, 4, 2, 1];
+    bits.forEach((value, index) => {
+        const bitElement = document.getElementById(`${columnId}-${value}`);
+        const isOn = binary[index] === '1';
+        
+        bitElement.textContent = binary[index];
+        bitElement.className = isOn ? 'bit on' : 'bit off';
+    });
+    
+    document.getElementById(`${columnId}-decimal`).textContent = digit;
+}
+            </pre>
+        </div>
+
+        <div class="testing-guide">
+            <h4>🎯 Success Criteria:</h4>
+            <p>You've successfully debugged when:</p>
+            <ul>
+                <li>All red decimal numbers exactly match the cyan digital time</li>
+                <li>All binary patterns correctly represent their decimal values</li>
+                <li>You can explain what each bug was and why it caused the symptoms you observed</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('digitalTime').textContent = 
+                `${hours}:${minutes}:${seconds}`;
+            
+            // SUSPICIOUS ...
+            updateBinaryColumn('h1', parseInt(hours[0]));
+            updateBinaryColumn('h2', parseInt(hours[1]) << 1);         
+            updateBinaryColumn('m1', parseInt(minutes[0]));
+            updateBinaryColumn('m2', parseInt(minutes[1]) + 1);         
+            updateBinaryColumn('s1', parseInt(seconds[1]));             
+            updateBinaryColumn('s2', parseInt(seconds[0]) * 2);         
+        }
+
+        function updateBinaryColumn(columnId, digit) {
+            let binary = digit.toString(2).padStart(4, '0');
+            
+            // SUSPICIOUS ...
+            if (columnId === 'm1') {
+                binary = binary.split('').reverse().join('');
+            }
+            
+            const bits = [8, 4, 2, 1];
+            bits.forEach((value, index) => {
+                const bitElement = document.getElementById(`${columnId}-${value}`);
+                const isOn = binary[index] === '1';
+                
+                bitElement.textContent = binary[index];
+                bitElement.className = isOn ? 'bit on' : 'bit off';
+            });
+            
+            document.getElementById(`${columnId}-decimal`).textContent = digit;
+        }
+
+        // Update every second
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
