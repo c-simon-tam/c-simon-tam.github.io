@@ -1,0 +1,75 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" data-theme="modern"   >
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/theme-modern-sgy.css"/>
+    <link rel="stylesheet" type="text/css" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/modern_icons.css"/>
+    
+    <script type='text/javascript'>
+      var writeMethodQuestions = [
+        {name: "greeting", params: "a name", ret: "some kind of greeting that addresses the name"},
+        {name: "morningGreeting", params: "a name", ret: "a morning greeting (e.g. good morning) that addresses the name"},
+        {name: "eveningGreeting", params: "a name", ret: "an evening greeting (e.g. good evening) that addresses the name"},
+        {name: "shout", params: "a String", ret: "the original String but all capitalized, with 3 exclamation marks at the end"},
+        {name: "product", params: "three integers", ret: "the result of multiplying the three integers together"},
+        {name: "arithmeticMean", params: "three doubles", ret: "the result of adding up the three doubles and dividing by 3"},
+        {name: "geometricMean", params: "three doubles", ret: "the cube root of multiplying the three doubles together (you can use Math.pow(base, exponent))"},
+      ];
+
+      function reroll() {
+        const index = getRandomIntInclusive(0, writeMethodQuestions.length-1);
+        document.getElementById("methodName1").innerText = writeMethodQuestions[index].name;
+        document.getElementById("methodName2").innerText = writeMethodQuestions[index].name;
+        document.getElementById("methodName3").innerText = writeMethodQuestions[index].name;
+        document.getElementById("methodName4").innerText = writeMethodQuestions[index].name;
+        document.getElementById("methodParams").innerText = writeMethodQuestions[index].params;
+        document.getElementById("methodReturn").innerText = writeMethodQuestions[index].ret;
+      }
+
+      function getRandomIntInclusive(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+      }
+    </script>
+    <title>Topic 1.3 - Methods (Demonstration)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+      label {color:blue}
+    </style>
+  </head>
+
+<!-- **************************************************************************************************************************************** -->
+
+  <body  class="sidebar-left js day-02 s-enable-course-dashboard s_grade_item_assignment sgy-immersive-reader-grade-item has-materials-player">
+
+    <div id="body">
+      <h1>Methods</h1>
+      <div class="info-container">
+        <div><button onclick="reroll();">Re-roll</button></div>
+        <div class="info-text">
+          <div class="info-body s-rte"><pre dir="ltr">
+            <ol>
+              <li>Write a method called <label id="methodName1">greeting</label> that takes <label id="methodParams">a name</label> and returns <label id="methodReturn">a greeting</label></li>
+
+              <li>Write the method signature for the <label id="methodName2"></label> method you just wrote.</li>
+
+              <li>Write another method with the same method name (<label id="methodName3">greeting</label>) that is allowed to exist in the same class.</li>
+
+              <li>What is method overloading? Why are your methods (<label id="methodName4">greeting</label>) an example of method overloading?</li>
+
+              <li>What does it mean when a method's return type is void?  
+In what circumstances would you declare a method’s return type as void?  
+In other words, what purpose do such methods serve if they can't give back a value?</li>
+            </ol>
+          </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>reroll();</script>
+</html>
