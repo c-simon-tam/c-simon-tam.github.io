@@ -24,10 +24,29 @@
       ];
 
       function reroll() {
-        document.getElementById("base2num1").innerText = getRandomIntInclusive(33, 63).toString(2);
-        document.getElementById("base2num2").innerText = getRandomIntInclusive(33, 63).toString(2);
-        document.getElementById("base16num").innerText = getRandomIntInclusive(161, 255).toString(16).toUpperCase();
-        document.getElementById("base10num").innerText = getRandomIntInclusive(100, 255);
+        const base2num1 = getRandomIntInclusive(33, 63);
+        document.getElementById("base2num1").innerText = base2num1.toString(2);
+        document.getElementById("showBase2num1").innerText = "[Show answer]";
+        document.getElementById("base2num1answer").style = "display:none";
+        document.getElementById("base2num1answer").innerText = base2num1;
+
+        const base2num2 = getRandomIntInclusive(33, 63);
+        document.getElementById("base2num2").innerText = base2num2.toString(2);
+        document.getElementById("showBase2num2").innerText = "[Show answer]";
+        document.getElementById("base2num2answer").style = "display:none";
+        document.getElementById("base2num2answer").innerText = base2num2;
+
+        const base16num = getRandomIntInclusive(161, 255);
+        document.getElementById("base16num").innerText = base16num.toString(16).toUpperCase();
+        document.getElementById("showBase16num").innerText = "[Show answer]";
+        document.getElementById("base16numAnswer").style = "display:none";
+        document.getElementById("base16numAnswer").innerText = base16num;
+
+        const base10num = getRandomIntInclusive(100, 255)
+        document.getElementById("base10num").innerText = base10num;
+        document.getElementById("showBase10num").innerText = "[Show answer]";
+        document.getElementById("base10numAnswer").style = "display:none";
+        document.getElementById("base10numAnswer").innerText = base10num.toString(2);
 
         document.getElementById("ttQuestion").innerText = truthTableQuestions[getRandomIntInclusive(0, truthTableQuestions.length-1)];
         document.getElementById("proofQuestion").innerText = proofQuestions[getRandomIntInclusive(0, proofQuestions.length-1)];
@@ -37,6 +56,45 @@
         const minCeiled = Math.ceil(min);
         const maxFloored = Math.floor(max);
         return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+      }
+
+      function showBase2num1Answer() {
+        if (document.getElementById("showBase2num1").innerText === "[Show answer]") {
+          document.getElementById("showBase2num1").innerText = "[Hide answer]";
+          document.getElementById("base2num1answer").style = "display:inline";
+        } else {
+          document.getElementById("showBase2num1").innerText = "[Show answer]";
+          document.getElementById("base2num1answer").style = "display:none";
+        }
+      }
+
+      function showBase2num2Answer() {
+        if (document.getElementById("showBase2num2").innerText === "[Show answer]") {
+          document.getElementById("showBase2num2").innerText = "[Hide answer]";
+          document.getElementById("base2num2answer").style = "display:inline";
+        } else {
+          document.getElementById("showBase2num2").innerText = "[Show answer]";
+          document.getElementById("base2num2answer").style = "display:none";
+        }
+      }
+
+      function showBase16numAnswer() {
+        if (document.getElementById("showBase16num").innerText === "[Show answer]") {
+          document.getElementById("showBase16num").innerText = "[Hide answer]";
+          document.getElementById("base16numAnswer").style = "display:inline";
+        } else {
+          document.getElementById("showBase16num").innerText = "[Show answer]";
+          document.getElementById("base16numAnswer").style = "display:none";
+        }
+      }
+      function showBase10numAnswer() {
+        if (document.getElementById("showBase10num").innerText === "[Show answer]") {
+          document.getElementById("showBase10num").innerText = "[Hide answer]";
+          document.getElementById("base10numAnswer").style = "display:inline";
+        } else {
+          document.getElementById("showBase10num").innerText = "[Show answer]";
+          document.getElementById("base10numAnswer").style = "display:none";
+        }
       }
     </script>
     <title>Topic 1.1 - Binary and Logic (Demonstration)</title>
@@ -48,19 +106,22 @@
   <body  class="sidebar-left js day-02 s-enable-course-dashboard s_grade_item_assignment sgy-immersive-reader-grade-item has-materials-player">
 
     <div id="body">
-
+      <h1>Binary and Logic</h1>
       <div class="info-container">
-        <div><button onclick="reroll();">Re-roll</button></div>
         <div class="info-text">
-          <div class="info-body s-rte"><pre dir="ltr">1. Convert <label id="base2num1">101011</label> (base-2 number) to base-10<br />
-            <br />2. Convert <label id="base2num2">110111</label> (base-2 number) to base-16<br />
-            <br />3. Convert <label id="base16num">BE</label> (base-16 number) to base-10<br />
-            <br />4. Convert <label id="base10num">147</label> (base-10 number) to base-2<br />
-            <br />5. Draw the truth table for <label id="ttQuestion">the addition of two bits (two inputs and two outputs)</label><br />
-            <br />6. Write the Boolean expression for each output<br />
-            <br />7. Draw the logic circuit<br />
-            <br />8. Prove <label id="proofQuestion">!(A&amp;&amp;B) == !A || !B (De Morgan’s)</label> using a truth table</pre>
-          </div>
+          <div><button onclick="reroll();">Re-roll</button></div>
+          <div class="info-body s-rte"><pre dir="ltr">
+            <ol>
+              <li>Convert <label id="base2num1">101011</label> (base-2 number) to base-10  <span id="showBase2num1" onclick="showBase2num1Answer()" style="color:blue">[Show answer]</span>  <span id="base2num1answer" style="display:none"></span></li>
+              <li>Convert <label id="base2num2">110111</label> (base-2 number) to base-16  <span id="showBase2num2" onclick="showBase2num2Answer()" style="color:blue">[Show answer]</span>  <span id="base2num2answer" style="display:none"></span></li>
+              <li>Convert <label id="base16num">BE</label> (base-16 number) to base-10 <span id="showBase16num" onclick="showBase16numAnswer()" style="color:blue">[Show answer]</span>  <span id="base16numAnswer" style="display:none"></span></li>
+              <li>Convert <label id="base10num">147</label> (base-10 number) to base-2 <span id="showBase10num" onclick="showBase10numAnswer()" style="color:blue">[Show answer]</span>  <span id="base10numAnswer" style="display:none"></span></li>
+              <li>Draw the truth table for <label id="ttQuestion">the addition of two bits (two inputs and two outputs)</label></li>
+              <li>Write the Boolean expression for each output</li>
+              <li>Draw the logic circuit</li>
+              <li>Prove <label id="proofQuestion">!(A&amp;&amp;B) == !A || !B (De Morgan’s)</label> using a truth table</li>         
+            </ol>
+          </pre></div>
         </div>
       </div>
     </div>
