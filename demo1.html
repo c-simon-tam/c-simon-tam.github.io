@@ -7,12 +7,39 @@
     <link rel="shortcut icon" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/theme-modern-sgy.css"/>
     <link rel="stylesheet" type="text/css" href="https://asset-cdn.schoology.com/sites/all/themes/schoology_theme/modern_icons.css"/>
-
-    <!-- Custom AI Chatbot -->
     
     <script type='text/javascript'>
-        </script>
-    <title>Topic 1.1 - Binary and Logic | Schoology</title>
+      var truthTableQuestions = [
+        "the addition of two bits (two inputs and two outputs)",
+        "the subtraction of two bits (two inputs and two outputs) - Note: 0 minus 1 would be 1 with underflow",
+        "A && (!B || C) (three inputs and one output)",
+        "A || (!B && C) (three inputs and one output)"
+      ];
+
+      var proofQuestions = [
+        "!(A && B) == !A || !B (De Morgan’s)",
+        "!(A || B) == !A && !B (De Morgan’s)",
+        "A && B == !(!A || !B) (De Morgan’s)",
+        "A || B == !(!A && !B) (De Morgan’s)",
+      ];
+
+      function reroll() {
+        document.getElementById("base2num1").innerText = getRandomIntInclusive(33, 63).toString(2);
+        document.getElementById("base2num2").innerText = getRandomIntInclusive(33, 63).toString(2);
+        document.getElementById("base16num").innerText = getRandomIntInclusive(161, 255).toString(16).toUpperCase();
+        document.getElementById("base10num").innerText = getRandomIntInclusive(100, 255);
+
+        document.getElementById("ttQuestion").innerText = truthTableQuestions[getRandomIntInclusive(0, truthTableQuestions.length-1)];
+        document.getElementById("proofQuestion").innerText = proofQuestions[getRandomIntInclusive(0, proofQuestions.length-1)];
+      }
+
+      function getRandomIntInclusive(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+      }
+    </script>
+    <title>Topic 1.1 - Binary and Logic (Demonstration)</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       </head>
 
@@ -23,18 +50,20 @@
     <div id="body">
 
       <div class="info-container">
+        <div><button onclick="reroll();">Re-roll</button></div>
         <div class="info-text">
-          <div class="info-body s-rte"><pre dir="ltr">1. Convert a 6-digit base-2 number to base-10<br />
-            <br />2. Convert a 6-digit base-2 number to base-16<br />
-            <br />3. Convert a 2-digit base-16 number to base-10<br />
-            <br />4. Convert a base-10 to base-2<br />
-            <br />5. Draw the truth table for the addition of two bits (two inputs)<br />
+          <div class="info-body s-rte"><pre dir="ltr">1. Convert <label id="base2num1">101011</label> (base-2 number) to base-10<br />
+            <br />2. Convert <label id="base2num2">110111</label> (base-2 number) to base-16<br />
+            <br />3. Convert <label id="base16num">BE</label> (base-16 number) to base-10<br />
+            <br />4. Convert <label id="base10num">147</label> (base-10 number) to base-2<br />
+            <br />5. Draw the truth table for <label id="ttQuestion">the addition of two bits (two inputs and two outputs)</label><br />
             <br />6. Write the Boolean expression for each output<br />
             <br />7. Draw the logic circuit<br />
-            <br />8. Prove !(A&amp;&amp;B) == !A || !B (De Morgan’s) using a truth table</pre>
+            <br />8. Prove <label id="proofQuestion">!(A&amp;&amp;B) == !A || !B (De Morgan’s)</label> using a truth table</pre>
           </div>
         </div>
       </div>
     </div>
   </body>
+  <script>reroll();</script>
 </html>
